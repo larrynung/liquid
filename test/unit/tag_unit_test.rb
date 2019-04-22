@@ -18,4 +18,24 @@ class TagUnitTest < Minitest::Test
     tag = Tag.parse("some_tag", "", Tokenizer.new(""), ParseContext.new)
     assert_equal 'some_tag', tag.tag_name
   end
+
+  def test_custom_tags_have_a_default_render_to_output_buffer_method_for_backwards_compatibility
+    klass = Class.new(Tag) do
+      def initialize; end
+
+      def render(*)
+        'hello'
+      end
+    end
+
+    tag = klass.send(:new)
+
+    assert_equal 'hello', tag.render
+
+    buf = ''
+    return_value = tag.render_to_output_buffer(nil, buf)
+    assert_equal 'hello', buf
+    assert_equal 'hello', return_value
+    assert_equal buf.object_id, return_value.object_id
+  end
 end
