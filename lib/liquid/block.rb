@@ -13,8 +13,8 @@ module Liquid
       end
     end
 
-    def render(context, output = '')
-      @body.render(context, output)
+    def render_to_output_buffer(context, output)
+      @body.render_to_output_buffer(context, output)
     end
 
     def blank?

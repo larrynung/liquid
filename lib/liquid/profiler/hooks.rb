@@ -11,13 +11,22 @@ module Liquid
   end
 
   class Include < Tag
-    def render_with_profiling(context, output)
+    def render_with_profiling(context)
       Profiler.profile_children(context.evaluate(@template_name_expr).to_s) do
-        render_without_profiling(context, output)
+        render_without_profiling(context)
       end
     end
 
     alias_method :render_without_profiling, :render
     alias_method :render, :render_with_profiling
+
+    def render_to_output_buffer_with_profiling(context, output)
+      Profiler.profile_children(context.evaluate(@template_name_expr).to_s) do
+        render_to_output_buffer_without_profiling(context, output)
+      end
+    end
+
+    alias_method :render_to_output_buffer_without_profiling, :render_to_output_buffer
+    alias_method :render_to_output_buffer, :render_to_output_buffer_with_profiling
   end
 end

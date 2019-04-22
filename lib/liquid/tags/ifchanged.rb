@@ -1,6 +1,6 @@
 module Liquid
   class Ifchanged < Block
-    def render(context, output)
+    def render_to_output_buffer(context, output)
       context.stack do
         block_output = super(context, '')
 
